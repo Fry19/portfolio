@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="../../assets/css/style.css?v=834457d7">
+<link rel="stylesheet" href="../../assets/css/style.css?v=bedc2fe3">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -61,6 +61,7 @@
     <nav class="toc" aria-label="On this page">
       <p class="eyebrow">On this page</p>
       <ol>
+        <li><a href="#at-a-glance">At a glance</a></li>
         <li><a href="#overview">Overview</a></li>
         <li><a href="#research">Research</a></li>
         <li><a href="#competitive-analysis">Competitive Analysis</a></li>
@@ -73,12 +74,22 @@
       </ol>
     </nav>
     <div class="case-body">
+<section class="glance reveal" id="at-a-glance" aria-label="At a glance">
+  <p class="eyebrow">At a glance</p>
+  <div class="glance-grid"><div class="glance-item"><p class="glance-label">The problem</p><p>People with celiac disease spend time and effort finding safe food away from home, and many feel anxious trying new restaurants that advertise gluten-free options for fear of cross-contamination.</p></div><div class="glance-item"><p class="glance-label">The approach</p><p>I ran user interviews and a competitive analysis, designed and usability-tested a mobile app, then extended the design across screen sizes, from smartwatch to desktop.</p></div><div class="glance-item"><p class="glance-label">The outcome</p><p>High-fidelity mobile and desktop prototypes; testing led to clearer gluten-free labels and a Favorites tab. One participant said the app brings “the confidence to travel more and try new restaurants!”</p></div></div>
+  <div class="results">
+    <p class="eyebrow">Highlights</p>
+    <ul class="result-grid"><li class="result"><span class="result-value is-word">All</span><span class="result-label">interviewees named finding safe food as a time sink</span></li><li class="result"><span class="result-value">3</span><span class="result-label">competitors analyzed: Find Me Gluten Free, Uber Eats, OpenTable</span></li><li class="result"><span class="result-value">2</span><span class="result-label">testing findings turned into design changes</span></li><li class="result"><span class="result-value">3</span><span class="result-label">screen sizes: mobile, smartwatch &amp; desktop</span></li></ul>
+  </div>
+</section>
 <figure class="figure size-medium reveal"><button class="zoom" type="button" aria-label="Enlarge image: OhYum!"><img src="../../assets/img/ohyum/RloKfpsqVlxaTJiP.webp" width="1514" height="1472" alt="OhYum!" loading="lazy" decoding="async"></button></figure>
 <figure class="figure size-medium reveal"><button class="zoom" type="button" aria-label="Enlarge image: OhYum!"><img src="../../assets/img/ohyum/Vo0qDjKg2c62jhRt.webp" width="1612" height="741" alt="OhYum!" loading="lazy" decoding="async"></button></figure>
 <div class="case-section" id="overview"><span class="num">01</span><h2>Overview</h2></div>
+<p class="section-intro reveal">This one is personal. Eating out with celiac disease means weighing cross-contamination risk with every food choice, so I set out to build an Uber Eats for the celiac community: quick, safe, and low-stress.</p>
 <div class="cols reveal" data-count="3"><div class="col"><h4>Background</h4><p>This project is a tribute to my mother, to myself, and to others living with restrictive diets because of autoimmune diseases like celiac disease. OhYum! helps people with celiac disease find safe, reliable food options tailored to their needs. Its intuitive interface and curated database make it easy to find low-risk meals nearby, taking the stress out of dining out or ordering in. Think of it as Uber Eats reimagined for the celiac community: convenience, safety, and peace of mind for anyone managing the condition.</p></div><div class="col"><h4>Challenge</h4><p>Eating out with celiac disease takes constant vigilance. Cross-contamination is a real risk in restaurants and other eateries, so every food choice has to be made with extra care.</p></div><div class="col"><h4>Solution</h4><p>An app that helps users quickly find safe places to eat, cutting wait times and minimizing the risk of cross-contamination and illness.</p></div></div>
 <figure class="figure size-medium reveal"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Overview"><img src="../../assets/img/ohyum/7JAFGDy7qXqC1Xsg.webp" width="1513" height="663" alt="OhYum! — Overview" loading="lazy" decoding="async"></button></figure>
 <div class="case-section" id="research"><span class="num">02</span><h2>Research</h2></div>
+<p class="section-intro reveal">Every interviewee raised the same pain point: finding safe food away from home takes too much time and effort. That, plus fear of cross-contamination, told me the app needed precise language and strong search.</p>
 <div class="prose reveal"><h4>Summary</h4><p>Preliminary research and pre-testing conversations shaped the targeted questions behind my user interviews. One pain point came up with every interviewee: the time and effort it takes to find and choose safe food away from home. Many participants also described anxiety about trying new restaurants that advertise gluten-free options, for fear of cross-contamination. The takeaway was clear: users needed a dedicated celiac app with precise language and robust search, built to ease these challenges and boost their confidence.</p></div>
 <div class="prose reveal"><h4>User Pain Points</h4></div>
 <div class="cols reveal" data-count="3"><div class="col"><h4>Availability</h4><p>Safe, fast, and convenient food options are scarce for people with celiac disease, making it hard to balance accessibility with dietary safety.</p></div><div class="col"><h4>Risk</h4><p>Many users described feeling anxious about visiting new restaurants that advertise gluten-free options, worried about cross-contamination and getting sick.</p></div><div class="col"><h4>Time</h4><p>Users were frustrated by how long it takes to find safe food, which often delays meals and adds to their overall stress.</p></div></div>
@@ -86,13 +97,16 @@
 <figure class="figure size-large reveal"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Persona &amp; Problem Statement"><img src="../../assets/img/ohyum/kAhcMogzoyhq2kCG.webp" width="1006" height="852" alt="OhYum! — Persona &amp; Problem Statement" loading="lazy" decoding="async"></button></figure>
 <div class="text-media reveal is-flipped"><div class="text-media-copy"><h4>User Journey Map</h4><p>I created a user journey map to outline the ideal flow for a user like Juanita and make sure each step of her experience felt intuitive.</p></div><figure class="figure size-medium"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — User Journey Map"><img src="../../assets/img/ohyum/dBzocsXg3wqQnPoE.webp" width="1708" height="957" alt="OhYum! — User Journey Map" loading="lazy" decoding="async"></button></figure></div>
 <div class="case-section" id="competitive-analysis"><span class="num">03</span><h2>Competitive Analysis</h2></div>
+<p class="section-intro reveal">Existing apps left gaps, and those gaps shaped my first sketches. I went through the key screens of Find Me Gluten Free, Uber Eats, and OpenTable to find them.</p>
 <div class="prose reveal"><p>I analyzed Find Me Gluten Free, Uber Eats, and OpenTable as key direct and indirect competitors. Detailed notes and screenshots of their key screens gave me insights that shaped my design decisions.</p></div>
 <div class="case-section" id="ideate-and-design"><span class="num">04</span><h2>Ideate &amp; Design</h2></div>
+<p class="section-intro reveal">Juanita needed a quick, reliable way to find safe places to eat, so my sketches focused on search results and map screens. I built the first digital wireframes from there.</p>
 <div class="text-media reveal is-flipped"><div class="text-media-copy"><h4>Paper Wireframes</h4><p>Working from the problem statement, I sketched a range of solutions to the gaps I’d identified in the competitive analysis. I focused on improving search results and map screens to make the experience more intuitive.</p></div><figure class="figure size-medium"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Paper Wireframes"><img src="../../assets/img/ohyum/OE2VMCuE33Ku0rYY.webp" width="1709" height="536" alt="OhYum! — Paper Wireframes" loading="lazy" decoding="async"></button></figure></div>
 <figure class="figure size-large reveal"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Paper Wireframes"><img src="../../assets/img/ohyum/QErHO5fnwyjQKelB.webp" width="1760" height="548" alt="OhYum! — Paper Wireframes" loading="lazy" decoding="async"></button></figure>
 <div class="prose reveal"><h4>Digital Wireframes</h4><p>Building on my ideation and paper sketches, I created the initial digital designs for OhYum!, focused on delivering personalized guidance that helps users meet their specific dietary needs.</p></div>
 <figure class="figure size-medium reveal"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Digital Wireframes"><img src="../../assets/img/ohyum/5tTrySJj4PYAZ912.webp" width="1705" height="605" alt="OhYum! — Digital Wireframes" loading="lazy" decoding="async"></button></figure>
 <div class="case-section" id="usability-testing"><span class="num">05</span><h2>Usability Testing</h2></div>
+<p class="section-intro reveal">Users wanted labels that clearly separate gluten-free from gluten-sensitive options, and they struggled to save favorite restaurants. I found both by testing the full flow, from browsing nearby restaurants to adding an item to the cart.</p>
 <div class="prose reveal"><h4>Low-Fidelity Prototype</h4><p>To prepare for usability testing, I built a low-fidelity prototype that connects the full user flow, from browsing nearby restaurants to adding a food item to the cart, simulating how users would navigate the app.</p></div>
 <div class="proto reveal" style="--ar: 800 / 900" data-src="https://embed.figma.com/proto/wE0mQ6TgwEFgvrog2uqnkQ/Project-3-%E2%80%94%C2%A0Google-UX-Cert-Design-For-Good?page-id=75%3A372&amp;node-id=75-387&amp;p=f&amp;viewport=903%2C643%2C0.48&amp;scaling=scale-down&amp;content-scaling=fixed&amp;starting-point-node-id=75%3A387&amp;embed-host=share&amp;hide-ui=1" data-title="OhYum! — interactive Figma prototype">
   <div class="proto-placeholder">
@@ -109,12 +123,14 @@
 <div class="prose reveal"><h4>Findings</h4></div>
 <div class="cols reveal" data-count="2"><div class="col"><h4>Clear Labeling</h4><p>Users wanted clear, accurate restaurant labels that distinguish gluten-free from gluten-sensitive options, so they can dine more safely and make informed choices.</p></div><div class="col"><h4>Saving Favorites</h4><p>Users struggled to add new favorite restaurants to their accounts and asked for favorites to live directly in the navigation bar.</p></div></div>
 <div class="case-section" id="iterate-and-refine"><span class="num">06</span><h2>Iterate &amp; Refine</h2></div>
+<p class="section-intro reveal">Both findings went straight into the mockups: gluten-free and gluten-sensitive options now get their own clearly labeled home-screen section, and Favorites sits in the navigation bar where users asked for it.</p>
 <div class="prose reveal"><h4>Mockups</h4><p>Based on the usability testing findings, I added a distinct home-screen section that clearly labels gluten-free vs. gluten-sensitive options, and introduced a Favorites tab in the navigation bar for quicker access.</p></div>
 <div class="gallery reveal" role="region" aria-label="OhYum! — Mockups gallery">
   <div class="gallery-track"><div class="gallery-item"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Mockups (1 of 2)"><img src="../../assets/img/ohyum/vmOlLSQzLQZQ1aZd.webp" width="1281" height="1075" alt="OhYum! — Mockups (1 of 2)" loading="lazy" decoding="async"></button></div><div class="gallery-item"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Mockups (2 of 2)"><img src="../../assets/img/ohyum/okKwFIJRXsz92Qc8.webp" width="1343" height="618" alt="OhYum! — Mockups (2 of 2)" loading="lazy" decoding="async"></button></div></div>
   <div class="gallery-controls"><span class="gallery-count">01 / 02</span><div class="gallery-buttons"><button class="icon-btn" type="button" data-dir="prev" aria-label="Previous image">←</button><button class="icon-btn" type="button" data-dir="next" aria-label="Next image">→</button></div></div>
 </div>
 <div class="case-section" id="accessibility-considerations"><span class="num">07</span><h2>Accessibility Considerations</h2></div>
+<p class="section-intro reveal">Safe-food information only helps if everyone can use it, so interactive elements carry descriptive screen reader labels and the branding uses strong color contrast. The high-fidelity mobile prototype then brings in the fixes from testing.</p>
 <div class="cols reveal" data-count="2"><div class="col"><h4>Screen Readers</h4><p>Interactive elements have descriptive labels that screen readers can easily interpret.</p></div><div class="col"><h4>Color Contrast</h4><p>The branding uses strong color contrast for visual clarity and accessibility.</p></div></div>
 <div class="prose reveal"><h4>High-Fidelity Prototype (Mobile)</h4><p>The high-fidelity prototype follows the same user flow as the low-fidelity version, incorporating the improvements made in response to usability testing feedback.</p></div>
 <div class="proto reveal" style="--ar: 800 / 900" data-src="https://embed.figma.com/proto/wE0mQ6TgwEFgvrog2uqnkQ/Project-3-%E2%80%94%C2%A0Google-UX-Cert-Design-For-Good?page-id=219%3A952&amp;node-id=219-953&amp;p=f&amp;viewport=876%2C565%2C0.27&amp;scaling=scale-down&amp;content-scaling=fixed&amp;starting-point-node-id=219%3A953&amp;embed-host=share&amp;hide-ui=1" data-title="OhYum! — interactive Figma prototype">
@@ -130,6 +146,7 @@
   </div>
 </div>
 <div class="case-section" id="responsive-design"><span class="num">08</span><h2>Responsive Design</h2></div>
+<p class="section-intro reveal">I kept the structure concise and intuitive as I extended OhYum! from the app to a responsive website, so the experience stays consistent from smartwatch to desktop.</p>
 <div class="text-media reveal is-flipped"><div class="text-media-copy"><h4>Sitemap</h4><p>With the app designs finalized, I moved on to the responsive website. The OhYum! sitemap guided how I structured each screen, creating a cohesive, consistent experience across devices. Keeping the structure concise and intuitive was a top priority.</p></div><figure class="figure size-medium"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Sitemap"><img src="../../assets/img/ohyum/LquK3O5p2RZschcF.webp" width="1349" height="1040" alt="OhYum! — Sitemap" loading="lazy" decoding="async"></button></figure></div>
 <div class="text-media reveal is-flipped"><div class="text-media-copy"><h4>Across Devices</h4><p>I tailored the designs to a range of screen sizes, including mobile, smartwatch, and desktop, and optimized each one to meet users’ needs on that device.</p></div><figure class="figure size-medium"><button class="zoom" type="button" aria-label="Enlarge image: OhYum! — Across Devices"><img src="../../assets/img/ohyum/DPpOYoUrHj8TQ1Rn.webp" width="1348" height="807" alt="OhYum! — Across Devices" loading="lazy" decoding="async"></button></figure></div>
 <div class="prose reveal"><h4>High-Fidelity Prototype (Desktop)</h4></div>
@@ -147,6 +164,7 @@
 </div>
 <blockquote class="quote reveal"><p>The OhYum! app brings me the confidence to travel more and try new restaurants!</p><footer>— Usability Testing Participant</footer></blockquote>
 <div class="case-section" id="reflection"><span class="num">09</span><h2>Reflection</h2></div>
+<p class="section-intro reveal">My biggest lesson: a big problem doesn’t need a big app. Solving one problem at a time spares users unnecessary features, and the next step is measuring whether OhYum! actually helps people find safe food faster.</p>
 <div class="prose reveal"><p>I loved working on this project. Creating a product that can make a meaningful difference for a community is rewarding in itself. My most valuable lesson: even when a challenge feels vast, I don’t need to solve everything at once. Tackling one problem at a time gives users a more enjoyable experience, without unnecessary features to overwhelm them.</p></div>
 <div class="prose reveal"><h4>Next Steps</h4><ul><li>Research how well the app meets its goal of helping people with celiac disease find food faster and more safely.</li><li>Explore partnerships with restaurants on their gluten-free menus.</li><li>Add a reviews tab and section to the mobile app and web platform.</li></ul></div>
     </div>
