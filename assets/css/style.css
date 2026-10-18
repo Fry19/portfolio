@@ -1206,6 +1206,15 @@ p {
 .text-media p + h4 {
   margin-top: 28px;
 }
+.prose ul + p,
+.col ul + p,
+.text-media ul + p {
+  margin-top: 14px;
+}
+.prose li ul,
+.col li ul {
+  margin-top: 6px;
+}
 .prose ul,
 .col ul,
 .text-media ul {
