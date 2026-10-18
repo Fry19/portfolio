@@ -176,6 +176,9 @@ p {
   color: var(--ink-3);
 }
 
+.nowrap {
+  white-space: nowrap;
+}
 .grad {
   background: var(--accent-grad);
   -webkit-background-clip: text;
@@ -473,7 +476,7 @@ p {
   }
 }
 .hero h1 {
-  max-width: 15ch;
+  max-width: 18ch;
   font-size: clamp(48px, 8.6vw, 124px);
   font-weight: 600;
   line-height: 0.94;
