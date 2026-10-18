@@ -166,4 +166,109 @@
       iframe.focus();
     });
   });
+
+  /* ---------- Hero tiles: grid cells that softly light up and fade ---------- */
+  const tilesCanvas = document.querySelector(".tiles");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (tilesCanvas && tilesCanvas.getContext && !reduceMotion) {
+    const ctx = tilesCanvas.getContext("2d");
+    const SIZE = 72; // matches .grid-lines background-size
+    const host = tilesCanvas.closest(".page-head") || tilesCanvas.parentElement;
+    let cols = 0;
+    let rows = 0;
+    let tiles = [];
+    let rgb = "94, 234, 160";
+    let running = false;
+    let visible = false;
+    let last = 0;
+    let nextSpawn = 0;
+
+    const readAccent = () => {
+      const hex = getComputedStyle(root).getPropertyValue("--accent").trim();
+      const m = hex.match(/^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i);
+      if (m) rgb = m.slice(1).map((h) => parseInt(h, 16)).join(", ");
+    };
+
+    const resize = () => {
+      const r = tilesCanvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      tilesCanvas.width = Math.round(r.width * dpr);
+      tilesCanvas.height = Math.round(r.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(r.width / SIZE);
+      rows = Math.ceil(r.height / SIZE);
+      tiles = Array.from({ length: cols * rows }, () => ({ a: 0, peak: 0 }));
+    };
+
+    // Raise a tile toward `peak`; it decays on its own once it gets there.
+    const light = (i, peak) => {
+      const t = tiles[i];
+      if (t && peak > t.a) t.peak = Math.max(t.peak, peak);
+    };
+
+    const frame = (now) => {
+      if (!running) return;
+      const dt = Math.min(now - last, 64);
+      last = now;
+
+      if (now >= nextSpawn) {
+        // Favor the upper rows, where the grid is most visible.
+        const row = Math.floor(Math.pow(Math.random(), 1.6) * rows);
+        light(row * cols + Math.floor(Math.random() * cols), 0.05 + Math.random() * 0.11);
+        // Keep density even: smaller screens (fewer tiles) light up less often.
+        const sparsity = Math.min(Math.max(240 / tiles.length, 1), 3);
+        nextSpawn = now + (180 + Math.random() * 260) * sparsity;
+      }
+
+      ctx.clearRect(0, 0, tilesCanvas.width, tilesCanvas.height);
+      for (let i = 0; i < tiles.length; i++) {
+        const t = tiles[i];
+        if (t.peak) {
+          t.a += (t.peak - t.a) * Math.min(dt / 180, 1);
+          if (t.a >= t.peak * 0.95) t.peak = 0;
+        } else if (t.a) {
+          t.a *= Math.exp(-dt / 900);
+          if (t.a < 0.004) {
+            t.a = 0;
+            continue;
+          }
+        } else {
+          continue;
+        }
+        ctx.fillStyle = `rgba(${rgb}, ${t.a.toFixed(3)})`;
+        ctx.fillRect((i % cols) * SIZE + 1, Math.floor(i / cols) * SIZE + 1, SIZE - 1, SIZE - 1);
+      }
+      requestAnimationFrame(frame);
+    };
+
+    const sync = () => {
+      const shouldRun = visible && !document.hidden;
+      if (shouldRun && !running) {
+        running = true;
+        last = performance.now();
+        requestAnimationFrame(frame);
+      } else if (!shouldRun) {
+        running = false;
+      }
+    };
+
+    readAccent();
+    resize();
+    new ResizeObserver(resize).observe(tilesCanvas);
+    new MutationObserver(readAccent).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    }).observe(tilesCanvas);
+    document.addEventListener("visibilitychange", sync);
+
+    if (window.matchMedia("(hover: hover)").matches) {
+      host.addEventListener("pointermove", (e) => {
+        const r = tilesCanvas.getBoundingClientRect();
+        const c = Math.floor((e.clientX - r.left) / SIZE);
+        const rr = Math.floor((e.clientY - r.top) / SIZE);
+        if (c >= 0 && c < cols && rr >= 0 && rr < rows) light(rr * cols + c, 0.16);
+      });
+    }
+  }
 })();
