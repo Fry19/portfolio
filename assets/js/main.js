@@ -167,13 +167,13 @@
     });
   });
 
-  /* ---------- Hero tiles: grid cells that softly light up and fade ---------- */
+  /* ---------- Hero tiles: grid cells that light up and fade ---------- */
   const tilesCanvas = document.querySelector(".tiles");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (tilesCanvas && tilesCanvas.getContext && !reduceMotion) {
+  if (tilesCanvas && tilesCanvas.getContext) {
     const ctx = tilesCanvas.getContext("2d");
     const SIZE = 72; // matches .grid-lines background-size
     const host = tilesCanvas.closest(".page-head") || tilesCanvas.parentElement;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let cols = 0;
     let rows = 0;
     let tiles = [];
@@ -185,8 +185,33 @@
 
     const readAccent = () => {
       const hex = getComputedStyle(root).getPropertyValue("--accent").trim();
-      const m = hex.match(/^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i);
+      const m = hex.match(/^#([da-f]{2})([da-f]{2})([da-f]{2})$/i);
       if (m) rgb = m.slice(1).map((h) => parseInt(h, 16)).join(", ");
+    };
+
+    // Random tile index, favoring the upper rows where the grid is most visible.
+    const randomTile = () =>
+      Math.floor(Math.pow(Math.random(), 1.5) * rows) * cols + Math.floor(Math.random() * cols);
+
+    // Raise a tile toward `peak`; it fades on its own once it gets there.
+    const light = (i, peak) => {
+      const t = tiles[i];
+      if (t && peak > t.a) t.peak = Math.max(t.peak, peak);
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, tilesCanvas.width, tilesCanvas.height);
+      ctx.lineWidth = 1;
+      for (let i = 0; i < tiles.length; i++) {
+        const a = tiles[i].a;
+        if (!a) continue;
+        const x = (i % cols) * SIZE;
+        const y = Math.floor(i / cols) * SIZE;
+        ctx.fillStyle = `rgba(${rgb}, ${a.toFixed(3)})`;
+        ctx.fillRect(x + 1, y + 1, SIZE - 1, SIZE - 1);
+        ctx.strokeStyle = `rgba(${rgb}, ${Math.min(a * 2.2, 0.6).toFixed(3)})`;
+        ctx.strokeRect(x + 1.5, y + 1.5, SIZE - 2, SIZE - 2);
+      }
     };
 
     const resize = () => {
@@ -198,12 +223,14 @@
       cols = Math.ceil(r.width / SIZE);
       rows = Math.ceil(r.height / SIZE);
       tiles = Array.from({ length: cols * rows }, () => ({ a: 0, peak: 0 }));
-    };
-
-    // Raise a tile toward `peak`; it decays on its own once it gets there.
-    const light = (i, peak) => {
-      const t = tiles[i];
-      if (t && peak > t.a) t.peak = Math.max(t.peak, peak);
+      if (reduceMotion) {
+        // A still pattern instead of motion.
+        for (let k = 0; k < Math.round(tiles.length / 14); k++) tiles[randomTile()].a = 0.08 + Math.random() * 0.12;
+        draw();
+      } else {
+        // Start with a scattering of lit tiles so the effect reads right away.
+        for (let k = 0; k < Math.round(tiles.length / 16); k++) light(randomTile(), 0.12 + Math.random() * 0.16);
+      }
     };
 
     const frame = (now) => {
@@ -212,32 +239,22 @@
       last = now;
 
       if (now >= nextSpawn) {
-        // Favor the upper rows, where the grid is most visible.
-        const row = Math.floor(Math.pow(Math.random(), 1.6) * rows);
-        light(row * cols + Math.floor(Math.random() * cols), 0.05 + Math.random() * 0.11);
+        light(randomTile(), 0.12 + Math.random() * 0.16);
         // Keep density even: smaller screens (fewer tiles) light up less often.
         const sparsity = Math.min(Math.max(240 / tiles.length, 1), 3);
-        nextSpawn = now + (180 + Math.random() * 260) * sparsity;
+        nextSpawn = now + (90 + Math.random() * 170) * sparsity;
       }
 
-      ctx.clearRect(0, 0, tilesCanvas.width, tilesCanvas.height);
-      for (let i = 0; i < tiles.length; i++) {
-        const t = tiles[i];
+      for (const t of tiles) {
         if (t.peak) {
-          t.a += (t.peak - t.a) * Math.min(dt / 180, 1);
+          t.a += (t.peak - t.a) * Math.min(dt / 220, 1);
           if (t.a >= t.peak * 0.95) t.peak = 0;
         } else if (t.a) {
-          t.a *= Math.exp(-dt / 900);
-          if (t.a < 0.004) {
-            t.a = 0;
-            continue;
-          }
-        } else {
-          continue;
+          t.a *= Math.exp(-dt / 1300);
+          if (t.a < 0.004) t.a = 0;
         }
-        ctx.fillStyle = `rgba(${rgb}, ${t.a.toFixed(3)})`;
-        ctx.fillRect((i % cols) * SIZE + 1, Math.floor(i / cols) * SIZE + 1, SIZE - 1, SIZE - 1);
       }
+      draw();
       requestAnimationFrame(frame);
     };
 
@@ -255,20 +272,26 @@
     readAccent();
     resize();
     new ResizeObserver(resize).observe(tilesCanvas);
-    new MutationObserver(readAccent).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
-    new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      sync();
-    }).observe(tilesCanvas);
-    document.addEventListener("visibilitychange", sync);
+    new MutationObserver(() => {
+      readAccent();
+      if (reduceMotion) draw();
+    }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
 
-    if (window.matchMedia("(hover: hover)").matches) {
-      host.addEventListener("pointermove", (e) => {
-        const r = tilesCanvas.getBoundingClientRect();
-        const c = Math.floor((e.clientX - r.left) / SIZE);
-        const rr = Math.floor((e.clientY - r.top) / SIZE);
-        if (c >= 0 && c < cols && rr >= 0 && rr < rows) light(rr * cols + c, 0.16);
-      });
+    if (!reduceMotion) {
+      new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        sync();
+      }).observe(tilesCanvas);
+      document.addEventListener("visibilitychange", sync);
+
+      if (window.matchMedia("(hover: hover)").matches) {
+        host.addEventListener("pointermove", (e) => {
+          const r = tilesCanvas.getBoundingClientRect();
+          const c = Math.floor((e.clientX - r.left) / SIZE);
+          const rr = Math.floor((e.clientY - r.top) / SIZE);
+          if (c >= 0 && c < cols && rr >= 0 && rr < rows) light(rr * cols + c, 0.3);
+        });
+      }
     }
   }
 })();
