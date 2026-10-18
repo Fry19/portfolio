@@ -1,0 +1,169 @@
+/* Nick Freiburger — Portfolio interactions (no dependencies) */
+(function () {
+  const root = document.documentElement;
+  root.classList.add("js");
+
+  /* ---------- Theme toggle (dark by default) ---------- */
+  const toggle = document.querySelector(".theme-toggle");
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const next = root.dataset.theme === "light" ? "dark" : "light";
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {
+        /* storage unavailable */
+      }
+    });
+  }
+
+  /* ---------- Card spotlight ---------- */
+  document.querySelectorAll(".card").forEach((card) => {
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      card.style.setProperty("--my", `${e.clientY - r.top}px`);
+    });
+  });
+
+  /* ---------- Header border on scroll + reading progress ---------- */
+  const header = document.querySelector(".site-header");
+  const progress = document.querySelector(".progress");
+  const onScroll = () => {
+    const y = window.scrollY;
+    if (header) header.classList.toggle("is-scrolled", y > 8);
+    if (progress) {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
+    }
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- Reveal on scroll ---------- */
+  const reveals = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px" }
+    );
+    reveals.forEach((el) => io.observe(el));
+  } else {
+    reveals.forEach((el) => el.classList.add("is-in"));
+  }
+
+  /* ---------- Copy email ---------- */
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const label = btn.querySelector("span") || btn;
+      const original = label.textContent;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        label.textContent = "Copied!";
+      } catch (e) {
+        label.textContent = "Press Ctrl+C";
+      }
+      setTimeout(() => (label.textContent = original), 1800);
+    });
+  });
+
+  /* ---------- Table of contents highlighting ---------- */
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  if (tocLinks.length && "IntersectionObserver" in window) {
+    const byId = new Map(tocLinks.map((a) => [a.hash.slice(1), a]));
+    const sections = tocLinks
+      .map((a) => document.getElementById(a.hash.slice(1)))
+      .filter(Boolean);
+    const setActive = () => {
+      let current = sections[0];
+      for (const s of sections) {
+        if (s.getBoundingClientRect().top < window.innerHeight * 0.35) current = s;
+      }
+      tocLinks.forEach((a) => a.classList.remove("is-active"));
+      const link = current && byId.get(current.id);
+      if (link) link.classList.add("is-active");
+    };
+    window.addEventListener("scroll", () => requestAnimationFrame(setActive), { passive: true });
+    setActive();
+  }
+
+  /* ---------- Lightbox ---------- */
+  const dialog = document.querySelector(".lightbox");
+  if (dialog && typeof dialog.showModal === "function") {
+    const img = dialog.querySelector("img");
+    let opener = null;
+    document.querySelectorAll(".zoom").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const source = btn.querySelector("img");
+        opener = btn;
+        img.src = source.currentSrc || source.src;
+        img.alt = source.alt;
+        img.classList.toggle("is-tall", source.naturalHeight / source.naturalWidth > 2.2);
+        dialog.showModal();
+      });
+    });
+    dialog.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("close", () => {
+      img.removeAttribute("src");
+      if (opener) opener.focus();
+    });
+  }
+
+  /* ---------- Galleries ---------- */
+  document.querySelectorAll(".gallery").forEach((gallery) => {
+    const track = gallery.querySelector(".gallery-track");
+    const prev = gallery.querySelector("[data-dir='prev']");
+    const next = gallery.querySelector("[data-dir='next']");
+    const count = gallery.querySelector(".gallery-count");
+    const items = Array.from(track.children);
+
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max;
+      let index = 0;
+      items.forEach((item, i) => {
+        if (item.offsetLeft - track.offsetLeft <= track.scrollLeft + 4) index = i;
+      });
+      if (track.scrollLeft >= max) index = items.length - 1;
+      count.textContent = `${String(index + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`;
+    };
+
+    const step = (dir) => {
+      const amount = Math.max(track.clientWidth * 0.8, 240);
+      track.scrollBy({ left: dir * amount, behavior: "smooth" });
+    };
+    prev.addEventListener("click", () => step(-1));
+    next.addEventListener("click", () => step(1));
+    track.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
+    window.addEventListener("resize", update);
+    items.forEach((item) => {
+      const im = item.querySelector("img");
+      if (im && !im.complete) im.addEventListener("load", update, { once: true });
+    });
+    update();
+  });
+
+  /* ---------- Figma prototypes (load on demand) ---------- */
+  document.querySelectorAll(".proto [data-load]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const proto = btn.closest(".proto");
+      const iframe = document.createElement("iframe");
+      iframe.src = proto.dataset.src;
+      iframe.title = proto.dataset.title || "Interactive Figma prototype";
+      iframe.allowFullscreen = true;
+      iframe.setAttribute("allow", "fullscreen");
+      proto.querySelector(".proto-placeholder").remove();
+      proto.classList.add("is-loaded");
+      proto.appendChild(iframe);
+      iframe.focus();
+    });
+  });
+})();
