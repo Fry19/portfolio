@@ -209,7 +209,7 @@
         const y = Math.floor(i / cols) * SIZE;
         ctx.fillStyle = `rgba(${rgb}, ${a.toFixed(3)})`;
         ctx.fillRect(x + 1, y + 1, SIZE - 1, SIZE - 1);
-        ctx.strokeStyle = `rgba(${rgb}, ${Math.min(a * 2.2, 0.6).toFixed(3)})`;
+        ctx.strokeStyle = `rgba(${rgb}, ${Math.min(a * 1.5, 0.22).toFixed(3)})`;
         ctx.strokeRect(x + 1.5, y + 1.5, SIZE - 2, SIZE - 2);
       }
     };
@@ -225,11 +225,11 @@
       tiles = Array.from({ length: cols * rows }, () => ({ a: 0, peak: 0 }));
       if (reduceMotion) {
         // A still pattern instead of motion.
-        for (let k = 0; k < Math.round(tiles.length / 14); k++) tiles[randomTile()].a = 0.08 + Math.random() * 0.12;
+        for (let k = 0; k < Math.round(tiles.length / 20); k++) tiles[randomTile()].a = 0.04 + Math.random() * 0.07;
         draw();
       } else {
         // Start with a scattering of lit tiles so the effect reads right away.
-        for (let k = 0; k < Math.round(tiles.length / 16); k++) light(randomTile(), 0.12 + Math.random() * 0.16);
+        for (let k = 0; k < Math.round(tiles.length / 32); k++) light(randomTile(), 0.05 + Math.random() * 0.08);
       }
     };
 
@@ -239,10 +239,10 @@
       last = now;
 
       if (now >= nextSpawn) {
-        light(randomTile(), 0.12 + Math.random() * 0.16);
+        light(randomTile(), 0.05 + Math.random() * 0.08);
         // Keep density even: smaller screens (fewer tiles) light up less often.
         const sparsity = Math.min(Math.max(240 / tiles.length, 1), 3);
-        nextSpawn = now + (90 + Math.random() * 170) * sparsity;
+        nextSpawn = now + (160 + Math.random() * 280) * sparsity;
       }
 
       for (const t of tiles) {
@@ -250,7 +250,7 @@
           t.a += (t.peak - t.a) * Math.min(dt / 220, 1);
           if (t.a >= t.peak * 0.95) t.peak = 0;
         } else if (t.a) {
-          t.a *= Math.exp(-dt / 1300);
+          t.a *= Math.exp(-dt / 1200);
           if (t.a < 0.004) t.a = 0;
         }
       }
@@ -289,7 +289,7 @@
           const r = tilesCanvas.getBoundingClientRect();
           const c = Math.floor((e.clientX - r.left) / SIZE);
           const rr = Math.floor((e.clientY - r.top) / SIZE);
-          if (c >= 0 && c < cols && rr >= 0 && rr < rows) light(rr * cols + c, 0.3);
+          if (c >= 0 && c < cols && rr >= 0 && rr < rows) light(rr * cols + c, 0.14);
         });
       }
     }
