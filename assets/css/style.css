@@ -484,6 +484,17 @@ p {
     opacity: 0;
   }
 }
+.badge-remote {
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .badge-sep {
+    display: none;
+  }
+  .badge-remote {
+    display: block;
+  }
+}
 .hero h1 {
   max-width: 18ch;
   font-size: clamp(48px, 8.6vw, 124px);
