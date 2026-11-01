@@ -35,15 +35,6 @@ Then open the URL it prints. (Opening the HTML files directly also works, but fo
 2. **Source:** Deploy from a branch. **Branch:** `main`, folder `/ (root)`.
 3. The site is published at `https://<username>.github.io/<repository>/` within a minute or two.
 
-## Using nickfreiburger.com
-
-When you're ready to move the domain over from the old site:
-
-1. In **Settings → Pages → Custom domain**, enter `www.nickfreiburger.com` and save (GitHub adds a `CNAME` file to the repo).
-2. At your domain registrar, set these DNS records:
-   - `CNAME` record: `www` → `<username>.github.io`
-   - `A` records for the root domain (`@`): `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-3. Once the DNS check passes, tick **Enforce HTTPS**.
 
 ## Credits
 
